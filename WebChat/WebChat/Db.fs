@@ -87,7 +87,7 @@ let displayOldMessages =
         for msg in ctx.Main.Messages do
             select msg
     }|>Seq.toList 
-
+      
 // Return the old messages of a specific chat room
 let openedChatRooms = 
     query {
