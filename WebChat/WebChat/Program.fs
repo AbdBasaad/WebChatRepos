@@ -20,13 +20,13 @@ let app =
   choose
     [ GET >=> choose
         [ path "/" >=> Files.browseFileHome "index.html"
-          path "/view" >=> OK View.index
+          path "/login" >=> OK View.login
+          path "/register" >=> OK View.register
           path "/hello" >=> OK "Hello GET"
           path "/goodbye" >=> OK "Good bye GET" ] 
       POST >=> choose
         [ pathScan "/hello/%s" sayHello
           path "/goodbye" >=> OK "Good bye POST" ] 
-      pathRegex "(.*)\.(css|png)" >=> Files.browseHome
     ]
         
 let config =

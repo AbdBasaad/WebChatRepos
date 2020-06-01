@@ -8,6 +8,10 @@ type ChatUser = {
     ConfirmPassword : Password
 }
 
+type ChatMsg = {
+    Msg : string
+}
+
 let pattern = passwordRegex @"(\w)[!@#$%^&*]{6,20}"
 
 let passwordsMatch = (fun f -> f.Password = f.ConfirmPassword), "Passwords must match"
@@ -20,3 +24,9 @@ let register : Form<ChatUser> =
             PasswordProp ((fun f -> <@ f.ConfirmPassword @>), [ pattern ] )
 
             ],[ passwordsMatch ])
+
+
+let message : Form<ChatMsg> = 
+    Form ([ TextProp ((fun f -> <@ f.Msg @>), [ maxLength 100 ])           
+            ],
+          [])
