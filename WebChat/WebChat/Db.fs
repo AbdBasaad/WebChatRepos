@@ -104,6 +104,16 @@ let deleteHistoryRoom chId =
     } |>Seq.iter (function x -> x.Delete())
     ctx.SubmitUpdates()
 
+// Delete a specific message
+let deleteMessage msgId = 
+    query {
+        for msg in ctx.Main.Messages do
+        where (msg.MessageId = msgId) 
+        select msg
+    } |>Seq.iter (function x -> x.Delete())
+    ctx.SubmitUpdates()
+
+
 // Admin functions --------------------------------------
 let cleanDatabase user =
     let lst = 

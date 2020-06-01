@@ -48,11 +48,11 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <None Include="public\index.html" />
-    <Compile Include="View.fs" />
+    <Compile Include="Db.fs" />
     <Compile Include="Form.fs" />
+    <Compile Include="View.fs" />
     <None Include="logo.png" />
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Db.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />

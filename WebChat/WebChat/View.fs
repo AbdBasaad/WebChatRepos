@@ -32,7 +32,7 @@ let login =
                                 Suave.Form.input (fun f -> <@ f.Password @>) [] Form.register
                             ]
                         ]
-                        input["type", "submit"; "value", "Login"]
+                        //input["type", "submit"; "value", "Login"]
                 ]                   
             ]
 
@@ -69,7 +69,7 @@ let register =
                                 Suave.Form.input (fun f -> <@ f.Password @>) [] Form.register
                             ]
                         ]
-                        input["type", "submit"; "value", "Register"]
+                        //input["type", "submit"; "value", "Register"]
                 ]                   
             ]
             div ["id", "footer"] [
@@ -78,7 +78,7 @@ let register =
         ]
     ]
     |> htmlToString
-
+(*
 let chatroomList (chatroom : Db.Cht) = [
     html [] [
         tag "h2" [] ["chatroom title here"]
@@ -109,3 +109,4 @@ let chatRoom (chtroomMsg : Db.openedChatRooms) = [
     ]
     |>htmlToString
 ]
+*)
