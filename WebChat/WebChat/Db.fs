@@ -86,14 +86,14 @@ let displayOldMessages =
     query {
         for msg in ctx.Main.Messages do
             select msg
-    }
+    }|>Seq.toList
 
 // Return the old messages of a specific chat room
 let openedChatRooms = 
     query {
         for cht in ctx.Main.Chat do
         select cht
-    }
+    }|>Seq.toList
 
 // Delete all messages of a specific chat room
 let deleteHistoryRoom chId = 
@@ -104,8 +104,7 @@ let deleteHistoryRoom chId =
     } |>Seq.iter (function x -> x.Delete())
     ctx.SubmitUpdates()
 
-
-
+// Admin functions --------------------------------------
 let cleanDatabase user =
     let lst = 
         query {
