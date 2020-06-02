@@ -38,8 +38,8 @@ let newUser (admin, password, userid, username) (ctx: DbContext) =
           printfn "User account has been created."
     |_ -> printfn "User id has been already used!.."  
     
-// Create new chat room
-let newChat (chatId, chatDesc) (ctx: DbContext) =
+// Create a new chat room
+let newRoom (chatId, chatDesc, grouType) (ctx: DbContext) =
     let cnt = 
         query {
             for cht in ctx.Main.Chat do
@@ -47,7 +47,7 @@ let newChat (chatId, chatDesc) (ctx: DbContext) =
             count
         }
     match cnt with
-    |0 -> let cht = ctx.Main.Chat.Create(chatDesc, chatId)
+    |0 -> let cht = ctx.Main.Chat.Create(chatDesc, chatId,grouType)
           ctx.SubmitUpdates()
           printfn "Chat has been created."
     |_ -> printfn "Chat id has been already used!.."  
@@ -82,21 +82,24 @@ let login userid password (ctx: DbContext) :User option=
     }|> Seq.tryHead
 
 // Display old chats
-let displayOldMessages =
+let displayOldMessages chatId =
     query {
         for msg in ctx.Main.Messages do
+            where (msg.ChatId = chatId)
             select msg
-    }|>Seq.toList 
+    }|> Seq.iter (fun m -> printfn "%s : %s %s"  m.UserId  m.MessageText  (m.MessageDt.ToString().Substring(4,m.MessageDt.ToString().Length-4)))
+
       
 // Return the old messages of a specific chat room
-let openedChatRooms = 
+let openedChatRooms usrId = 
     query {
-        for cht in ctx.Main.Chat do
+        for cht in ctx.Main.UserChat do
+        where (cht.UserId = usrId)
         select cht
     }|>Seq.toList
 
 // Delete all messages of a specific chat room
-let deleteHistoryRoom chId = 
+let deleteChatRoom chId = 
     query {
         for msg in ctx.Main.Messages do
         where (msg.ChatId = chId) 
@@ -110,9 +113,8 @@ let deleteMessage msgId =
         for msg in ctx.Main.Messages do
         where (msg.MessageId = msgId) 
         select msg
-    } |>Seq.iter (function x -> x.Delete())
+    }|>Seq.iter (function x -> x.Delete())
     ctx.SubmitUpdates()
-
 
 // Admin functions --------------------------------------
 let cleanDatabase user =
@@ -123,26 +125,22 @@ let cleanDatabase user =
             select usr
         }
         |>Seq.toList
-
     match lst with
     |a when lst.Length > 0 ->   query {
                                     for msg in ctx.Main.Messages do
                                     select msg
                                 }
                                 |>Seq.iter (function tbl -> tbl.Delete())
-
                                 query {
                                     for uc in ctx.Main.UserChat do
                                     select uc
                                 }
                                 |>Seq.iter (function tbl -> tbl.Delete())
-
                                 query {
                                     for c in ctx.Main.Chat do
                                     select c
                                 }
                                 |>Seq.iter (function tbl -> tbl.Delete())
-
                                 query {
                                     for u in ctx.Main.Users do
                                     where (u.Admin = "N")
