@@ -30,7 +30,7 @@ let login =
                                 Suave.Form.input (fun f -> <@ f.Password @>) [] Form.login
                             ]
                         ]
-                        input["type", "submit"; "value", "Login"]
+                        //input["type", "submit"; "value", "Login"]
                 ]                   
             ]
 
@@ -54,21 +54,21 @@ let register =
                   
                 tag "form" ["method", "POST"]  [
                      
-                        tag "fieldset" [] [
-                            div["class", "editor-label"] [
-                                Text "Enter Username : "
-                            ]
-                            div["class", "editor-field"] [
-                                Suave.Form.input (fun f -> <@ f.UserName @>) [] Form.register
-                            ]
-                            div["class", "editor-label"] [
-                                Text "Enter Password : "
-                            ]
-                            div["class", "editor-field"] [
-                                Suave.Form.input (fun f -> <@ f.Password @>) [] Form.register
-                            ]
+                    tag "fieldset" [] [
+                        div["class", "editor-label"] [
+                            Text "Enter Username : "
                         ]
-                        input ["type", "submit"; "value", "Register"]
+                        div["class", "editor-field"] [
+                            Suave.Form.input (fun f -> <@ f.UserName @>) [] Form.register
+                        ]
+                        div["class", "editor-label"] [
+                            Text "Enter Password : "
+                        ]
+                        div["class", "editor-field"] [
+                            Suave.Form.input (fun f -> <@ f.Password @>) [] Form.register
+                        ]
+                    ]
+                    input["type", "submit"; "value", "Register"]
                 ]                   
             ]
             div ["id", "footer"] [
