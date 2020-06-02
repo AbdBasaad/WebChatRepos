@@ -30,7 +30,7 @@ let login =
                                 Suave.Form.input (fun f -> <@ f.Password @>) [] Form.login
                             ]
                         ]
-                        //input["type", "submit"; "value", "Login"]
+                        input["type", "submit"; "value", "Login"]
                 ]                   
             ]
 
