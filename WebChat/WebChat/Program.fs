@@ -31,7 +31,7 @@ let app =
         
 let config =
   { defaultConfig with homeFolder = Some (Path.GetFullPath  __SOURCE_DIRECTORY__+ @"\public") }
-
+  
 Db.showUsers
 |> Seq.iter (fun usr -> printfn "Id: %s Name: %s Pass: %s Admin: %s" usr.UserId usr.UserName usr.Password usr.Admin)
 printfn "-----------"

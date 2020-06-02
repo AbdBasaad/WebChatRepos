@@ -2,9 +2,8 @@
 
 open Suave.Form
 open Suave.Html
-open Suave
 open Form
-open Db
+
 
 let login =
     html [] [
@@ -16,20 +15,19 @@ let login =
         body [] [
             div ["id", "header"] [
                     
-                tag "form" ["method", "POST"]  [
-                       
+                tag "form" ["method", "POST"]  [                      
                         tag "fieldset" [] [
                             div["class", "editor-label"] [
                                 Text "Username : "
                             ]
                             div["class", "editor-field"] [
-                                Suave.Form.input (fun f -> <@ f.UserName @>) [] Form.register
+                                Suave.Form.input (fun f -> <@ f.UserName @>) [] Form.login
                             ]
                             div["class", "editor-label"] [
                                 Text "Password : "
                             ]
                             div["class", "editor-field"] [
-                                Suave.Form.input (fun f -> <@ f.Password @>) [] Form.register
+                                Suave.Form.input (fun f -> <@ f.Password @>) [] Form.login
                             ]
                         ]
                         input["type", "submit"; "value", "Login"]
@@ -37,7 +35,7 @@ let login =
             ]
 
             div ["id", "footer"] [
-                a "/register" [] [Text "Register"]
+                a "/register" [] [Text "Don't have an account? Register here"]
             ]
         ]
     ]
@@ -50,6 +48,7 @@ let register =
             title [] "Web-based Chat"
             //cssLink "/Website.css"
         ]
+        tag "h2" [] [Text "Create a account"]
         body [] [
             div ["id", "header"] [
                   
@@ -69,19 +68,19 @@ let register =
                                 Suave.Form.input (fun f -> <@ f.Password @>) [] Form.register
                             ]
                         ]
-                        input["type", "submit"; "value", "Register"]
+                        input ["type", "submit"; "value", "Register"]
                 ]                   
             ]
             div ["id", "footer"] [
-                a "/login" [] [Text "Login"]
+                a "/login" [] [Text "Already have an account? Login here"]
             ]
         ]
     ]
     |> htmlToString
-
+(*
 let chatroomList (chatroom : Db.Cht) = [
     html [] [
-        tag "h2" [] ["chatroom title here"]
+        tag "h2" [] [Text "chatroom title here"]
         div ["id", "chatroom list"] [
             for (caption,t) in [ "Chat room: ", chatroom] ->
                 p [] [
@@ -96,9 +95,9 @@ let chatroomList (chatroom : Db.Cht) = [
     |>htmlToString
 ]
 
-let chatRoom (chtroomMsg : Db.openedChatRooms) = [
+let chatRoom (chtroomMsg : Db.UsrCht) = [
     html [] [
-        tag "h2" [] ["Welcome to the chat room"]
+        tag "h2" [] [Text "Welcome to the chat room"]
         div ["id", "chatroom messaging"] [
             li [chtroomMsg]
                   
@@ -109,3 +108,4 @@ let chatRoom (chtroomMsg : Db.openedChatRooms) = [
     ]
     |>htmlToString
 ]
+*)

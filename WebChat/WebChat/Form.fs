@@ -25,6 +25,13 @@ let register : Form<ChatUser> =
 
             ],[ passwordsMatch ])
 
+let login: Form<ChatUser> = 
+    Form ([ TextProp ((fun f -> <@ f.UserName @>), [maxLength 20])
+
+            PasswordProp ((fun f -> <@ f.Password @>), [ pattern ] )
+
+            ],[ ])
+
 
 let message : Form<ChatMsg> = 
     Form ([ TextProp ((fun f -> <@ f.Msg @>), [ maxLength 100 ])           
