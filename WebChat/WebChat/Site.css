@@ -1,0 +1,25 @@
+﻿body {
+    margin: 0px;
+    padding: 40px 0 400px 0;
+    background: #1b1d20;
+}
+
+h1, h2, a {
+    font-family: "Rubik", Helvetica, Arial, sans-serif;
+    color: white;
+    font-weight: normal;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 100px;
+}
+
+p {
+    font-family: "IBM Plex Mono", Helvetica, Arial, sans-serif;
+    font-size: 1em;
+    line-height: 1.5em;
+    color: #b0b2b3;
+}
+
+

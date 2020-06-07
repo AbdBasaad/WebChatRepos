@@ -38,8 +38,25 @@ let newUser (admin, password, userid, username) (ctx: DbContext) =
           printfn "User account has been created."
     |_ -> printfn "User id has been already used!.."  
     
-// Create a new chat room
-let newRoom (chatId, chatDesc, grouType) (ctx: DbContext) =
+// Create a private chat room
+let newPrivateRoom (userS, userR) =
+    let cnt = 
+        query {
+            for ch in ctx.Main.Chat do
+            where (ch.ChatType = "P")
+            maxBy ch.CId
+        }
+    
+    let id = "p" + string (cnt + int64(1))
+    let cht = ctx.Main.Chat.Create("Private", id , "P")
+    let usr_chatS = ctx.Main.UserChat.Create(id, DateTime.Now, userS)
+    let usr_chatR = ctx.Main.UserChat.Create(id, DateTime.Now, userR)
+    ctx.SubmitUpdates()
+    printfn "Chat has been created."
+    cht
+
+// Create a group chat room
+let newGroupRoom (chatId, chatDesc) (ctx: DbContext) =
     let cnt = 
         query {
             for cht in ctx.Main.Chat do
@@ -47,7 +64,7 @@ let newRoom (chatId, chatDesc, grouType) (ctx: DbContext) =
             count
         }
     match cnt with
-    |0 -> let cht = ctx.Main.Chat.Create(chatDesc, chatId,grouType)
+    |0 -> let cht = ctx.Main.Chat.Create(chatDesc, chatId, "G")
           ctx.SubmitUpdates()
           printfn "Chat has been created."
     |_ -> printfn "Chat id has been already used!.."  
@@ -59,7 +76,7 @@ let messageParse (msg: String) :bool =
     |_ -> false
 
 // Save messages in the database
-let saveMessage (chatid, filePath, messageText, messageType, userid) (ctx: DbContext) =
+let saveMessage (chatid, filePath, messageText, messageType, userid) =
     match messageParse messageText with
     |true -> let row = ctx.Main.Messages.Create(chatid, filePath, messageText, messageType, userid)
              ctx.SubmitUpdates()
@@ -71,6 +88,12 @@ let showUsers =
     query {
         for user in ctx.Main.Users do
             select user
+    }
+
+let showRooms =
+    query {
+        for ms in ctx.Main.Messages do
+            select ms
     }
 
 // Login form
@@ -87,8 +110,8 @@ let displayOldMessages chatId =
         for msg in ctx.Main.Messages do
             where (msg.ChatId = chatId)
             select msg
-    }|> Seq.iter (fun m -> printfn "%s : %s %s"  m.UserId  m.MessageText  (m.MessageDt.ToString().Substring(4,m.MessageDt.ToString().Length-4)))
-
+    }|> Seq.iter (fun m -> printfn "%s : %s"  m.UserId  m.MessageText  )
+    //(m.MessageDt.ToString().Substring(4,m.MessageDt.ToString().Length-4))
       
 // Return the old messages of a specific chat room
 let openedChatRooms usrId = 

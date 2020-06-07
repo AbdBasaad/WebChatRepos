@@ -23,7 +23,8 @@ let app =
           path "/login" >=> OK View.login
           path "/register" >=> OK View.register
           path "/hello" >=> OK "Hello GET"
-          path "/goodbye" >=> OK "Good bye GET" ] 
+          path "/goodbye" >=> OK "Good bye GET"
+          pathRegex "(.*)\.(css|png)" >=> Files.browseHome] 
       POST >=> choose
         [ pathScan "/hello/%s" sayHello
           path "/goodbye" >=> OK "Good bye POST" ] 
@@ -31,7 +32,7 @@ let app =
 
 let config =
   { defaultConfig with homeFolder = Some (Path.GetFullPath  __SOURCE_DIRECTORY__+ @"\public") }
-  
+
 Db.showUsers
 |> Seq.iter (fun usr -> printfn "Id: %s Name: %s Pass: %s Admin: %s" usr.UserId usr.UserName usr.Password usr.Admin)
 printfn "-----------------------"

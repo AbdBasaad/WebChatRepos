@@ -4,15 +4,19 @@ open Suave.Form
 open Suave.Html
 open Form
 
+let h2 s = tag "h2" [] [Text s]
+let cssLink href = link [ "href", href; " rel", "stylesheet"; " type", "text/css" ]
 
 let login =
     html [] [
         head [] [
             title [] "Web-based Chat"
-           // cssLink "/Website.css"
+            cssLink "Site.css"
         ]
 
         body [] [
+            h2 "SharpApp"
+
             div ["id", "header"] [
                     
                 tag "form" ["method", "POST"]  [                      
@@ -37,6 +41,7 @@ let login =
             div ["id", "footer"] [
                 a "/register" [] [Text "Don't have an account? Register here"]
             ]
+            cssLink "Site.css"
         ]
     ]
     |> htmlToString
@@ -46,7 +51,7 @@ let register =
     html [] [
         head [] [
             title [] "Web-based Chat"
-            //cssLink "/Website.css"
+            cssLink "/Website.css"
         ]
         tag "h2" [] [Text "Create a account"]
         body [] [
