@@ -110,8 +110,7 @@ let displayOldMessages chatId =
         for msg in ctx.Main.Messages do
             where (msg.ChatId = chatId)
             select msg
-    }|> Seq.iter (fun m -> printfn "%s : %s"  m.UserId  m.MessageText  )
-    //(m.MessageDt.ToString().Substring(4,m.MessageDt.ToString().Length-4))
+    }|> Seq.iter (fun m -> printfn "%s : %s  %s"  m.UserId  m.MessageText (m.MessageDt.ToString().Substring(4,m.MessageDt.ToString().Length-4)))
       
 // Return the old messages of a specific chat room
 let openedChatRooms usrId = 
