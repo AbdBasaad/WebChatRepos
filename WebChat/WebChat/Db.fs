@@ -4,6 +4,7 @@ open FSharp.Data.Sql
 open System.Net.Http
 open Suave
 open System
+open System.Numerics
 
 let [<Literal>] resolutionPath = "./packages/System.Data.SQLite.Core.1.0.112.2/lib/net40/System.Data.SQLite.dll"
 let [<Literal>] connectionString = "Data Source=" + __SOURCE_DIRECTORY__+ @"/sharpApp.db;Version=3"
@@ -25,7 +26,7 @@ type UsrCht   = DbContext.``main.User_chatEntity``
 type Messages = DbContext.``main.MessagesEntity``
 
 // Create new user. Stop onConflict (command usr.OnConflict <- FSharp.Data.Sql.Common.OnConflict.Update)
-let newUser (admin, password, userid, username) (ctx: DbContext) =
+let newUser (admin, password, userid, username) =
     let cnt = 
         query {
             for user in ctx.Main.Users do
@@ -35,8 +36,8 @@ let newUser (admin, password, userid, username) (ctx: DbContext) =
     match cnt with
     |0 -> let usr = ctx.Main.Users.Create(admin, password, userid, username)
           ctx.SubmitUpdates()
-          printfn "User account has been created."
-    |_ -> printfn "User id has been already used!.."  
+          printfn "User account has been created."         
+    |_ -> printfn "User id has been already used!.."    
     
 // Create a private chat room
 let newPrivateRoom (userS, userR) =
@@ -97,12 +98,12 @@ let showRooms =
     }
 
 // Login form
-let login userid password (ctx: DbContext) :User option=
+let login userid password :bool =
     query {
         for user in ctx.Main.Users do
             where (user.UserId = userid && user.Password = password)
             select user
-    }|> Seq.tryHead
+    }|>Seq.exists (fun usr -> usr.UserId = userid && usr.Password = password)
 
 // Display old chats
 let displayOldMessages chatId =
@@ -126,14 +127,14 @@ let deleteChatRoom chId =
         for msg in ctx.Main.Messages do
         where (msg.ChatId = chId) 
         select msg
-    } |>Seq.iter (function x -> x.Delete())
+    }|>Seq.iter (function x  -> x.Delete())     
     ctx.SubmitUpdates()
 
 // Delete a specific message
 let deleteMessage msgId = 
     query {
         for msg in ctx.Main.Messages do
-        where (msg.MessageId = msgId) 
+        where (msg.MessageId = msgId)
         select msg
     }|>Seq.iter (function x -> x.Delete())
     ctx.SubmitUpdates()
